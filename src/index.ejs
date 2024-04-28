@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>React Microfrontends</title>
+  <meta name="importmap-type" content="systemjs-importmap" />
+  <% if (isLocal) { %>
+  <script type="systemjs-importmap">
+    {
+      "imports": {
+			"@react-mf/root-config": "//localhost:9000/react-mf-root-config.js",
+    		"@react-mf/navbar": "//localhost:8080/react-mf-navbar.js",
+    		"@react-mf/styleguide": "//localhost:8081/react-mf-styleguide.js", 
+			"@react-mf/people": "//localhost:8083/react-mf-people.js", 
+			"@react-mf/planets": "//localhost:8084/react-mf-planets.js", 
+			"@react-mf/spacecraft": "//localhost:8085/react-mf-spacecraft.js", 
+			"@react-mf/api": "//localhost:8082/react-mf-api.js", 
+			
+    		"react": "https://cdn.jsdelivr.net/npm/react@16.13.0/umd/react.production.min.js",
+    		"react-dom": "https://cdn.jsdelivr.net/npm/react-dom@16.13.0/umd/react-dom.production.min.js",
+    		"rxjs": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs/system/rxjs.min.js",
+    		"rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs/system/rxjs-operators.min.js",
+    		"single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.3.0/lib/system/single-spa.min.js"
+
+      }
+    }
+  </script>
+  <% } %>
+  <script src="https://cdn.jsdelivr.net/npm/import-map-overrides@2.2.0/dist/import-map-overrides.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/extras/amd.min.js"></script>
+
+  <template id="single-spa-layout">
+	
+    <single-spa-router>
+      <nav class="topnav">
+        <application name="@react-mf/navbar" loader="topNav" error="topNav"></application>
+      </nav>
+		
+      <div class="main-content mt-16">
+			
+        <route path="people">
+          <application name="@react-mf/people"></application>
+        </route>
+        <route path="planets">
+          <application name="@react-mf/planets"></application>
+        </route>
+		   <route path="spacecraft">
+          <application name="@react-mf/spacecraft"></application>
+        </route>
+
+
+        <redirect from="/earth" to="/planets"></redirect>
+   	<route default></route>
+    
+    </single-spa-router>
+  </template>
+
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif; 
+    }
+
+    .bg-image {
+      background-image: url('https://example.com/star-wars-background.jpg'); 
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1; 
+    }
+
+	.bg-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5); 
+      z-index: -1;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div class="bg-image" 
+	style="background-image: 
+		url('https://res.cloudinary.com/leegodden/image/upload/v1714229649/darth-with-logo-2_bqunt4.png');">
+</div>
+
+	
+  <script>
+    System.import('@react-mf/root-config');
+    System.import('@react-mf/navbar');
+    System.import('@react-mf/styleguide');
+	 System.import('@react-mf/people');
+	 System.import('@react-mf/planets');
+	  System.import('@react-mf/spacecraft');
+	//  System.import('@react-mf/api');
+	 
+  </script>
+
+ 
+  <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
+   
+</body>
+</html>
